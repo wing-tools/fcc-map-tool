@@ -2,53 +2,112 @@
 <html>
 <head>
     <title>FCC Map Link Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 2em;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 2.5em;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #1a56db;
+            margin-bottom: 0.5em;
+        }
+        h3 {
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            box-sizing: border-box; /* Ensures padding doesn't affect the width */
+        }
+        button {
+            background-color: #1a56db; /* A nice blue color */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1444b0; /* A slightly darker blue on hover */
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 2em 0;
+        }
+        a {
+            color: #1a56db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h2>FCC Map Link Generator 🗺️</h2>
+        <p>This tool helps you quickly generate filtered Provider Detail map links from a Location Summary URL, preserving the exact location.</p>
+        <hr>
+        <h3>Generate Provider Detail Link for Specific Location</h3>
+        <p>
+            Use this section to take a general location and get a filtered provider view, zoomed in on the exact coordinates.
+            <br>
+            <strong>Step A:</strong> Search for an address on the <a href="https://broadbandmap.fcc.gov/location-summary/mobile?version=dec2024&zoom=4&env=0&tech=tech4g" target="_blank">FCC Location Summary page</a>.
+            <br>
+            <strong>Step B:</strong> Copy the full URL from your browser's address bar.
+            <br>
+            <strong>Step C:</strong> Paste the URL below and click "Generate Link".
+        </p>
+        <input type="text" id="locationUrl" placeholder="Paste Location Summary URL here">
+        <button onclick="generateProviderLink()">Generate Link</button>
 
-    <h2>FCC Map Link Generator</h2>
-    <p>This tool helps you quickly generate filtered Provider Detail map links from a Location Summary URL, preserving the exact location.</p>
+        <script>
+            function generateProviderLink() {
+                const fullUrl = document.getElementById('locationUrl').value;
+                try {
+                    const url = new URL(fullUrl);
+                    const newVlon = url.searchParams.get('vlon');
+                    const newVlat = url.searchParams.get('vlat');
 
-    <hr>
-
-    <h3>Generate Provider Detail Link for Specific Location</h3>
-    <p>
-        Use this section to take a general location and get a filtered provider view, zoomed in on the exact coordinates.
-        <br>
-        <strong>Step A:</strong> Search for an address on the <a href="https://broadbandmap.fcc.gov/location-summary/mobile?version=dec2024&zoom=4&env=0&tech=tech4g" target="_blank">FCC Location Summary page</a>.
-        <br>
-        <strong>Step B:</strong> Copy the full URL from your browser's address bar.
-        <br>
-        <strong>Step C:</strong> Paste the URL below and click "Generate Link".
-    </p>
-    <input type="text" id="locationUrl" style="width: 500px;" placeholder="Paste Location Summary URL here">
-    <button onclick="generateProviderLink()">Generate Link</button>
-
-    <script>
-        function generateProviderLink() {
-            const fullUrl = document.getElementById('locationUrl').value;
-            try {
-                const url = new URL(fullUrl);
-                const newVlon = url.searchParams.get('vlon');
-                const newVlat = url.searchParams.get('vlat');
-
-                if (newVlon && newVlat) {
-                    // Increased zoom level for a more "zeroed-in" view (e.g., 17 or 18)
-                    const enhancedZoom = 18; 
-                    const baseProviderUrl = `https://broadbandmap.fcc.gov/provider-detail/mobile?version=dec2024&zoom=${enhancedZoom}`;
-                    // Keep your specific provider filters
-                    const providers = "&providers=130077_400_on%2C130403_400_on%2C131425_400_on&env=0&pct_cvg=0";
-                    
-                    const finalUrl = `${baseProviderUrl}&vlon=${newVlon}&vlat=${newVlat}${providers}`;
-                    
-                    window.open(finalUrl, '_blank');
-                } else {
-                    alert("Invalid URL. Please make sure the URL contains both vlon and vlat parameters from the Location Summary page.");
+                    if (newVlon && newVlat) {
+                        const enhancedZoom = 18;
+                        const baseProviderUrl = `https://broadbandmap.fcc.gov/provider-detail/mobile?version=dec2024&zoom=${enhancedZoom}`;
+                        const providers = "&providers=130077_400_on%2C130403_400_on%2C131425_400_on&env=0&pct_cvg=0";
+                        const finalUrl = `${baseProviderUrl}&vlon=${newVlon}&vlat=${newVlat}${providers}`;
+                        
+                        window.open(finalUrl, '_blank');
+                    } else {
+                        alert("Invalid URL. Please make sure the URL contains both vlon and vlat parameters from the Location Summary page.");
+                    }
+                } catch (e) {
+                    alert("Invalid URL format. Please paste a valid FCC Location Summary map URL.");
                 }
-            } catch (e) {
-                alert("Invalid URL format. Please paste a valid FCC Location Summary map URL.");
             }
-        }
-    </script>
-
+        </script>
+    </div>
 </body>
 </html>
