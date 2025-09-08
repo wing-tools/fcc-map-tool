@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>FCC Map Link Generator</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,10 +37,10 @@
             border-radius: 5px;
             font-size: 16px;
             margin-top: 10px;
-            box-sizing: border-box; /* Ensures padding doesn't affect the width */
+            box-sizing: border-box;
         }
         button {
-            background-color: #1a56db; /* A nice blue color */
+            background-color: #1a56db;
             color: white;
             padding: 12px 24px;
             border: none;
@@ -51,7 +52,7 @@
             font-weight: bold;
         }
         button:hover {
-            background-color: #1444b0; /* A slightly darker blue on hover */
+            background-color: #1444b0;
         }
         hr {
             border: 0;
@@ -94,9 +95,8 @@
                     const newVlat = url.searchParams.get('vlat');
 
                     if (newVlon && newVlat) {
-                        const zoomLevel = 15; 
+                        const zoomLevel = 15;
                         const baseProviderUrl = `https://broadbandmap.fcc.gov/provider-detail/mobile?version=dec2024&zoom=${zoomLevel}`;
-                        // UPDATED: Reordered providers to Verizon, AT&T, T-Mobile
                         const providers = "&providers=131425_400_on%2C130077_400_on%2C130403_400_on&env=0&pct_cvg=0";
                         
                         const finalUrl = `${baseProviderUrl}&vlon=${newVlon}&vlat=${newVlat}${providers}`;
