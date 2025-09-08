@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCC Map Link Generator</title>
+</head>
+<body>
+
+    <h2>FCC Map Link Generator</h2>
+    <p>This tool helps you quickly generate links between the FCC's Location Summary and Provider Detail maps, preserving the location.</p>
+
+    <hr>
+
+    <h3>1. Generate Provider Detail Link</h3>
+    <p>
+        Use this section to take a general location and get a filtered provider view.
+        <br>
+        <strong>Step A:</strong> Search for an address on the <a href="https://broadbandmap.fcc.gov/location-summary/mobile?version=dec2024&zoom=4&env=0&tech=tech4g" target="_blank">FCC Location Summary page</a>.
+        <br>
+        <strong>Step B:</strong> Copy the full URL from your browser's address bar.
+        <br>
+        <strong>Step C:</strong> Paste the URL below and click "Generate Link".
+    </p>
+    <input type="text" id="locationUrl" style="width: 500px;" placeholder="Paste Location Summary URL here">
+    <button onclick="generateProviderLink()">Generate Link</button>
+
+    <hr>
+
+    <h3>2. Generate Location Summary Link</h3>
+    <p>
+        Use this section to take a provider detail view and go back to a general location view.
+        <br>
+        <strong>Step A:</strong> Go to any Provider Detail map page on the FCC website.
+        <br>
+        <strong>Step B:</strong> Copy the full URL from your browser's address bar.
+        <br>
+        <strong>Step C:</strong> Paste the URL below and click "Generate Link".
+    </p>
+    <input type="text" id="providerUrl" style="width: 500px;" placeholder="Paste Provider Detail URL here">
+    <button onclick="generateLocationLink()">Generate Link</button>
+
+    <script>
+        function generateProviderLink() {
+            const fullUrl = document.getElementById('locationUrl').value;
+            try {
+                const url = new URL(fullUrl);
+                const newVlon = url.searchParams.get('vlon');
+                const newVlat = url.searchParams.get('vlat');
+
+                if (newVlon && newVlat) {
+                    const baseProviderUrl = "https://broadbandmap.fcc.gov/provider-detail/mobile?version=dec2024&zoom=14.58";
+                    const providers = "&providers=130077_400_on%2C130403_400_on%2C131425_400_on&env=0&pct_cvg=0";
+                    
+                    const finalUrl = `${baseProviderUrl}&vlon=${newVlon}&vlat=${newVlat}${providers}`;
+                    
+                    window.open(finalUrl, '_blank');
+                } else {
+                    alert("Invalid URL. Please make sure the URL contains both vlon and vlat parameters.");
+                }
+            } catch (e) {
+                alert("Invalid URL format. Please paste a valid FCC map URL.");
+            }
+        }
+
+        function generateLocationLink() {
+            const fullUrl = document.getElementById('providerUrl').value;
+            try {
+                const url = new URL(fullUrl);
+                const newVlon = url.searchParams.get('vlon');
+                const newVlat = url.searchParams.get('vlat');
+                const newZoom = url.searchParams.get('zoom');
+
+                if (newVlon && newVlat) {
+                    const baseUrl = "https://broadbandmap.fcc.gov/location-summary/mobile?version=dec2024&env=0";
+                    const zoomParam = newZoom ? `&zoom=${newZoom}` : '&zoom=14.58'; // Use existing zoom or default
+                    
+                    const finalUrl = `${baseUrl}&vlon=${newVlon}&vlat=${newVlat}${zoomParam}`;
+                    
+                    window.open(finalUrl, '_blank');
+                } else {
+                    alert("Invalid URL. Please make sure the URL contains both vlon and vlat parameters.");
+                }
+            } catch (e) {
+                alert("Invalid URL format. Please paste a valid FCC map URL.");
+            }
+        }
+    </script>
+
+</body>
+</html>
