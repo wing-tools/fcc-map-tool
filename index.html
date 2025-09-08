@@ -94,11 +94,10 @@
                     const newVlat = url.searchParams.get('vlat');
 
                     if (newVlon && newVlat) {
-                        // Changed zoom level to 15 as requested
                         const zoomLevel = 15; 
                         const baseProviderUrl = `https://broadbandmap.fcc.gov/provider-detail/mobile?version=dec2024&zoom=${zoomLevel}`;
-                        // Keep your specific provider filters
-                        const providers = "&providers=130077_400_on%2C130403_400_on%2C131425_400_on&env=0&pct_cvg=0";
+                        // UPDATED: Reordered providers to Verizon, AT&T, T-Mobile
+                        const providers = "&providers=131425_400_on%2C130077_400_on%2C130403_400_on&env=0&pct_cvg=0";
                         
                         const finalUrl = `${baseProviderUrl}&vlon=${newVlon}&vlat=${newVlat}${providers}`;
                         
